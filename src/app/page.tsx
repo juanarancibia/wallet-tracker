@@ -1,3 +1,4 @@
+import WalletForm from "@/components/wallet/WalletForm";
 import WalletCards from "@/components/wallet/WalletsCard";
 
 export default function Home() {

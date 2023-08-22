@@ -8,6 +8,14 @@ import {
   CardContent,
 } from "../ui/card";
 import WalletRow from "./WalletRow";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import WalletForm from "./WalletForm";
 
 const WalletCards = () => {
   return (
@@ -16,9 +24,23 @@ const WalletCards = () => {
         <CardTitle>
           <div className="flex items-center">
             <p>Wallets</p>
-            <Button className="ml-auto" variant="ghost" size="icon">
-              <PlusCircle />
-            </Button>
+
+            <Dialog>
+              <DialogTrigger className="ml-auto">
+                <Button variant="ghost" size="icon">
+                  <PlusCircle />
+                </Button>
+              </DialogTrigger>
+
+              <DialogContent>
+                <DialogTitle>Wallets</DialogTitle>
+                <DialogDescription>
+                  Add a new wallet to your watchlist
+                </DialogDescription>
+
+                <WalletForm />
+              </DialogContent>
+            </Dialog>
           </div>
         </CardTitle>
         <CardDescription>Track wallets across chains</CardDescription>
