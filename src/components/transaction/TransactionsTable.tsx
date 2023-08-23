@@ -26,6 +26,7 @@ const TransactionsTable: FC<{}> = () => {
         </TableRow>
       </TableHeader>
 
+      {/* Conditions to show red/green depending on receive or withdraw */}
       <TableBody>
         {[0, 1, 2, 3, 4, 5, 6].map((_, index) => (
           <TableRow key={index}>
