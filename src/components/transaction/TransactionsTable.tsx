@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import {
   Table,
@@ -10,12 +12,19 @@ import {
 } from "../ui/table";
 import { MoveRight } from "lucide-react";
 import DatePicker from "../DatePicker";
+import { useRecoilValue } from "recoil";
+import { selectedWalletState } from "@/states/wallets.atom";
 
 const TransactionsTable: FC<{}> = () => {
+  const selectedWallet = useRecoilValue(selectedWalletState);
+
   return (
     <>
       <div className="flex align-center justify-between">
-        <p className="font-semibold text-2xl text-primary">Transactions</p>
+        <p className="font-semibold text-2xl text-primary">
+          Transactions {selectedWallet?.alias && `of ${selectedWallet.alias}`}
+        </p>
+
         <DatePicker />
       </div>
       <Table>

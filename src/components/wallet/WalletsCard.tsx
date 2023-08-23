@@ -58,6 +58,7 @@ const WalletCards = () => {
             key={index}
             alias={wallet.alias}
             network={wallet.network}
+            address={wallet.address}
             balance={index * 100}
           />
         ))}
