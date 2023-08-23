@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
+      <body className="mb-8">
         <RecoilRoot>
           <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
             {children}

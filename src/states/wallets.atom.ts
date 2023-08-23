@@ -3,7 +3,7 @@ import { atom } from "recoil";
 import * as z from "zod";
 import localStorageEffect from "./localStorageEffect.util";
 
-type WalletSchemaType = z.infer<typeof WalletSchema>;
+export type WalletSchemaType = z.infer<typeof WalletSchema>;
 
 const walletsStateKey = "WalletsState";
 

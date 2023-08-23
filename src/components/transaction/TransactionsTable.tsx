@@ -1,6 +1,6 @@
 "use client";
 
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,13 +10,35 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { MoveRight } from "lucide-react";
+import { MoveLeft, MoveRight } from "lucide-react";
 import DatePicker from "../DatePicker";
-import { useRecoilValue } from "recoil";
-import { selectedWalletState } from "@/states/wallets.atom";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { WalletSchemaType, selectedWalletState } from "@/states/wallets.atom";
+import { transactionsState } from "@/states/transactions.atom";
+import useAlchemyTransactionsHistory from "@/hooks/useAlchemy";
+import { CustomTransaction, TransactionType } from "@/models/transaction.model";
 
 const TransactionsTable: FC<{}> = () => {
-  const selectedWallet = useRecoilValue(selectedWalletState);
+  const [transactions, setTransactions] = useState<CustomTransaction[]>([]);
+  const selectedWallet = useRecoilValue<WalletSchemaType>(selectedWalletState);
+  const getAssetTransfers = useAlchemyTransactionsHistory(
+    selectedWallet.address
+  );
+
+  const formatAddress = (address: string): string => {
+    return address.toLowerCase() == selectedWallet.address.toLowerCase()
+      ? selectedWallet.alias
+      : `${address.slice(0, 5)}...${address.slice(-5)}`;
+  };
+
+  useEffect(() => {
+    Promise.all([
+      getAssetTransfers(TransactionType.Incoming),
+      getAssetTransfers(TransactionType.Withdrawl),
+    ]).then(([incoming, withdrawl]) =>
+      setTransactions([...incoming, ...withdrawl])
+    );
+  }, []);
 
   return (
     <>
@@ -43,17 +65,29 @@ const TransactionsTable: FC<{}> = () => {
 
         {/* Conditions to show red/green depending on receive or withdraw */}
         <TableBody>
-          {[0, 1, 2, 3, 4, 5, 6].map((_, index) => (
+          {transactions.map((tx, index) => (
             <TableRow key={index}>
               <TableCell className="w-min">
-                <MoveRight className="text-green-600" />
+                {tx.transactionType === TransactionType.Incoming ? (
+                  <MoveRight className="text-green-600" />
+                ) : (
+                  <MoveLeft className="text-red-600" />
+                )}
               </TableCell>
-              <TableCell>0x123...abc</TableCell>
-              <TableCell>0x456...def</TableCell>
-              <TableCell>18/08/2023</TableCell>
-              <TableCell>USDT</TableCell>
-              <TableCell className="font-semibold text-green-600">
-                +123.456,00
+              <TableCell>{formatAddress(tx.from)}</TableCell>
+              <TableCell>{formatAddress(tx.to || "")}</TableCell>
+              <TableCell>{tx.blockNum}</TableCell>
+              <TableCell>{tx.asset}</TableCell>
+              <TableCell
+                className={`font-semibold ${
+                  tx.transactionType === TransactionType.Incoming
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
+              >
+                {`${
+                  tx.transactionType === TransactionType.Incoming ? "+" : "-"
+                }$${tx.value}`}
               </TableCell>
             </TableRow>
           ))}
