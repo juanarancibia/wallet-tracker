@@ -23,7 +23,7 @@ const WalletCards = () => {
       <CardHeader>
         <CardTitle>
           <div className="flex items-center">
-            <p>Wallets</p>
+            <p className="text-primary">Wallets</p>
 
             <Dialog>
               <DialogTrigger className="ml-auto">
