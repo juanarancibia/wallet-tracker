@@ -1,14 +1,16 @@
+"use client";
+
 import { ThemeProvider } from "@/components/theme-provider";
-import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { RecoilRoot } from "recoil";
+import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+//TODO Fix ssr with recoil
 
-export const metadata: Metadata = {
-  title: "Wallet Tracker",
-  description: "Track all your wallets!",
-};
+// export const metadata: Metadata = {
+//   title: "Wallet Tracker",
+//   description: "Track all your wallets!",
+// };
 
 export default function RootLayout({
   children,
@@ -17,10 +19,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-          {children}
-        </ThemeProvider>
+      <body>
+        <RecoilRoot>
+          <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+            {children}
+          </ThemeProvider>
+        </RecoilRoot>
       </body>
     </html>
   );

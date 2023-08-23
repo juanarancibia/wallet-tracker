@@ -1,3 +1,5 @@
+"use client";
+
 import { PlusCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import {
@@ -16,8 +18,12 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import WalletForm from "./WalletForm";
+import { useRecoilValue } from "recoil";
+import { walletsState } from "@/states/wallets.atom";
 
 const WalletCards = () => {
+  const walletsStateValue = useRecoilValue(walletsState);
+
   return (
     <Card className="w-[400px] mt-8">
       <CardHeader>
@@ -47,12 +53,12 @@ const WalletCards = () => {
       </CardHeader>
 
       <CardContent>
-        {[1, 2, 3, 4, 5].map((_, index) => (
+        {walletsStateValue.map((wallet, index) => (
           <WalletRow
             key={index}
-            alias="DeFi Argentina"
-            network="Polygon"
-            balance={_ * 100}
+            alias={wallet.alias}
+            network={wallet.network}
+            balance={index * 100}
           />
         ))}
       </CardContent>

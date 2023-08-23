@@ -1,6 +1,6 @@
 "use client";
 
-import { WalletFormSchema } from "@/models/wallet.schema";
+import { WalletSchema } from "@/models/wallet.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC } from "react";
 import { ControllerRenderProps, useForm } from "react-hook-form";
@@ -15,10 +15,12 @@ import {
   FormMessage,
 } from "../ui/form";
 import { Input } from "../ui/input";
+import { useRecoilState } from "recoil";
+import { walletsState } from "@/states/wallets.atom";
 
 // TODO: Fix any type
 const CustomFormField: FC<{
-  field: ControllerRenderProps<z.infer<typeof WalletFormSchema>, any>;
+  field: ControllerRenderProps<z.infer<typeof WalletSchema>, any>;
   label: string;
   placeholder: string;
   description: string;
@@ -33,8 +35,8 @@ const CustomFormField: FC<{
 );
 
 const WalletForm: FC<{}> = () => {
-  const form = useForm<z.infer<typeof WalletFormSchema>>({
-    resolver: zodResolver(WalletFormSchema),
+  const form = useForm<z.infer<typeof WalletSchema>>({
+    resolver: zodResolver(WalletSchema),
     defaultValues: {
       alias: "",
       network: "",
@@ -42,8 +44,10 @@ const WalletForm: FC<{}> = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof WalletFormSchema>) => {
-    console.log(values);
+  const [walletsStateValue, setWalletsState] = useRecoilState(walletsState);
+
+  const onSubmit = (values: z.infer<typeof WalletSchema>) => {
+    setWalletsState((current) => [...current, values]);
   };
 
   return (
